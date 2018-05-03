@@ -59,13 +59,6 @@ function getSnippetBgColor(html) {
 function updateEnvironment(snippetBgColor) {
   // update snippet bg color
   document.getElementById('snippet').style.backgroundColor = snippetBgColor
-
-  // update backdrop color
-  if (isDark(snippetBgColor)) {
-    snippetContainerNode.style.backgroundColor = '#f2f2f2'
-  } else {
-    snippetContainerNode.style.background = 'none'
-  }
 }
 
 function getMinIndent(code) {
@@ -160,14 +153,6 @@ window.addEventListener('message', e => {
 
       const initialHtml = getInitialHtml(fontFamily)
       snippetNode.innerHTML = initialHtml
-
-      // update backdrop color, using bgColor from last pasted snippet
-      // cannot deduce from initialHtml since it's always using Nord color
-      if (isDark(bgColor)) {
-        snippetContainerNode.style.backgroundColor = '#f2f2f2'
-      } else {
-        snippetContainerNode.style.background = 'none'
-      }
 
       snippetContainerNode.style.opacity = '1'
     } else if (e.data.type === 'update') {

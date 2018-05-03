@@ -1,4 +1,9 @@
 # Changelog
+### 1.0.0 | 2018-05-03
+
+- Fork from origin repo
+- Remove container background, make it transparent
+- Modify content box-shadow, make it more smooth
 
 ### 0.2.2 | 2018-02-19
 
