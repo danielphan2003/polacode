@@ -2,23 +2,17 @@ const vscode = require('vscode')
 const path = require('path')
 const { writeFileSync } = require('fs')
 const { homedir } = require('os')
-const ep = require('./ep')
-ep.on('message', ({ action, data }) => {
-	if (action === 'info') {
-		console.log(data)
-	}
-	if (action === 'showMsg') {
-		vscode.window.showInformationMessage(data)
-	}
-})
-ep.stderr.on('data', d => console.log(d.toString()))
-ep.on('exit', code => {
-	console.log('exit', code)
-})
+const initClipboard = require('node-clipboardwriter')
 
-const writeSerializedBlobToFile = (serializeBlob, fileName) => {
+let clipboard
+initClipboard().then(clip => (clipboard = clip))
+
+const serializedBlobToBuffer = serializeBlob => {
 	const bytes = new Uint8Array(serializeBlob.split(','))
-	writeFileSync(fileName, new Buffer(bytes))
+	return new Buffer(bytes)
+}
+const writeSerializedBlobToFile = (serializeBlob, fileName) => {
+	writeFileSync(fileName, serializedBlobToBuffer(serializeBlob))
 }
 
 function activate(context) {
@@ -43,9 +37,13 @@ function activate(context) {
 	})
 
 	vscode.commands.registerCommand('polacode.copyToClipboard', serializedBlob => {
-		const p = path.join(__dirname, '.tmpimg')
-		writeSerializedBlobToFile(serializedBlob, p)
-		ep.send({ action: 'copyImgWithPath', data: p })
+		clipboard.writeImage(serializedBlobToBuffer(serializedBlob)).then(success => {
+			if (success) {
+				vscode.window.showInformationMessage('Image copied to clipboard!')
+			} else {
+				vscode.window.showInformationMessage('Failed to copy image to clipboard!')
+			}
+		})
 	})
 
 	vscode.commands.registerCommand('polacode.activate', () => {
