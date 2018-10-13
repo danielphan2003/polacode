@@ -28,10 +28,9 @@ const handleMessage = ({ action, data }) => {
 			clipboard.writeText(data)
 		}
 		if (action === 'copyImgWithPath') {
-			process.send({ action: 'showMsg', data: 'Start copying!' })
 			const img = nativeImage.createFromPath(data)
 			clipboard.writeImage(img)
-			process.send({ action: 'showMsg', data: 'Copied!' })
+			process.send({ action: 'showMsg', data: 'Image copied to clipboard!' })
 		}
 	} catch (e) {
 		process.send({ action: 'error', data: e.stack })
