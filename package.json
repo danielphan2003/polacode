@@ -40,5 +40,35 @@
 	},
 	"dependencies": {
 		"node-clipboardwriter": "0.0.1"
+	},
+	"configuration": {
+		"title": "Polacode Custom Styles",
+		"properties": {
+			"polacode.container.paddingLeft": {
+				"type": "number",
+				"default": "22",
+				"description": "Specifies the padding left that will be applied to the container"
+			},
+			"polacode.container.paddingRight": {
+				"type": "number",
+				"default": "22",
+				"description": "Specifies the padding right that will be applied to the container"
+			},
+			"polacode.container.paddingTop": {
+				"type": "number",
+				"default": "22",
+				"description": "Specifies the padding top that will be applied to the container"
+			},
+			"polacode.container.paddingBottom": {
+				"type": "number",
+				"default": "22",
+				"description": "Specifies the padding bottom that will be applied to the container"
+			},
+			"polacode.container.backgroundColor": {
+				"type": "string",
+				"default": "#f2f2f2",
+				"description": "Specifies the background color that will be applied to the container"
+			}
+		}
 	}
 }
