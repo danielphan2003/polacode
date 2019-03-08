@@ -1,5 +1,15 @@
 # Changelog
 
+### 1.1.0-dan | 2019-03-09
+
+- Fork from moyus repo, mauro-codes repo, etc.
+  
+### 1.0.0 | 2018-05-03
+
+- Fork from origin repo
+- Remove container background, make it transparent
+- Modify content box-shadow, make it more smooth
+
 ### 0.2.2 | 2018-02-19
 
 - Remove "Pasted content is invalid" check. Will do proper HTML validation in [#30](https://github.com/octref/polacode/issues/30).
