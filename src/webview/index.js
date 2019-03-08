@@ -26,19 +26,19 @@ const serializeBlob = (blob, cb) => {
 function postMessage(type, data) {
   window.parent.postMessage(
     {
-      command: 'did-click-link',
-      data: `command:polacode._onmessage?${encodeURIComponent(JSON.stringify({ type, data }))}`
+      type,
+      data
     },
-    'file://'
+    '*'
   )
 }
 function shoot(serializedBlob) {
   window.parent.postMessage(
     {
-      command: 'did-click-link',
-      data: `command:polacode.shoot?${encodeURIComponent(JSON.stringify(serializedBlob))}`
+      type: 'shoot',
+      serializedBlob
     },
-    'file://'
+    '*'
   )
 }
 

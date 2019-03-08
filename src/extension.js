@@ -1,5 +1,6 @@
 const vscode = require('vscode')
 const path = require('path')
+const fs = require('fs')
 const { writeFileSync } = require('fs')
 const { homedir } = require('os')
 
@@ -30,19 +31,38 @@ function activate(context) {
   })
 
   vscode.commands.registerCommand('polacode.activate', () => {
-    vscode.commands
-      .executeCommand('vscode.previewHtml', indexUri, 2, 'Polacode 📸', {
-        allowScripts: true
-      })
-      .then(() => {
-        const fontFamily = vscode.workspace.getConfiguration('editor').fontFamily
-        const bgColor = context.globalState.get('polacode.bgColor', '#2e3440')
-        vscode.commands.executeCommand('_workbench.htmlPreview.postMessage', indexUri, {
-          type: 'init',
-          fontFamily,
-          bgColor
-        })
-      })
+    const v = vscode.window.createWebview(indexUri, 2, {
+      enableCommandUris: true,
+      enableScripts: true,
+      retainContextWhenHidden: false
+    });
+    v.html = fs.readFileSync(htmlPath, 'utf-8');
+    const fontFamily = vscode.workspace.getConfiguration('editor').fontFamily
+    const bgColor = context.globalState.get('polacode.bgColor', '#2e3440')
+    v.postMessage({
+      type: 'init',
+      fontFamily,
+      bgColor
+    })
+    v.onDidReceiveMessage(data => {
+      if (data.type === 'shoot') {
+        vscode.commands.executeCommand('polacode.shoot', data.serializedBlob)
+      }
+    })
+
+    // vscode.commands
+    //   .executeCommand('vscode.previewHtml', indexUri, 2, 'Polacode 📸', {
+    //     allowScripts: true
+    //   })
+    //   .then(() => {
+    //     const fontFamily = vscode.workspace.getConfiguration('editor').fontFamily
+    //     const bgColor = context.globalState.get('polacode.bgColor', '#2e3440')
+    //     vscode.commands.executeCommand('_workbench.htmlPreview.postMessage', indexUri, {
+    //       type: 'init',
+    //       fontFamily,
+    //       bgColor
+    //     })
+    //   })
   })
 
   vscode.window.onDidChangeTextEditorSelection(e => {
