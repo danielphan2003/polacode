@@ -2,7 +2,7 @@
 	"name": "polacode",
 	"displayName": "Polacode",
 	"description": "📸  Polaroid for your code",
-	"version": "0.2.2-dan",
+	"version": "1.1.0-dan",
 	"repository": {
 		"type": "git",
 		"url": "git://github.com/danielphan2003/polacode.git"
