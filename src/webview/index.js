@@ -70,15 +70,8 @@ function getSnippetBgColor(html) {
 }
 
 function updateEnvironment(snippetBgColor) {
-	// update snippet bg color
-	document.getElementById('snippet').style.backgroundColor = snippetBgColor
-
-	// update backdrop color
-	if (isDark(snippetBgColor)) {
-		snippetContainerNode.style.backgroundColor = '#f2f2f2'
-	} else {
-		snippetContainerNode.style.background = 'none'
-	}
+  // update snippet bg color
+  document.getElementById('snippet').style.backgroundColor = snippetBgColor
 }
 
 function getMinIndent(code) {
