@@ -17,6 +17,7 @@ const serializeBlob = (blob, cb) => {
 		const bytes = new Uint8Array(fileReader.result)
 		cb(Array.from(bytes).join(','))
 	}
+
 	function getBrightness(color) {
 		const rgb = this.toRgb()
 		return (rgb.r * 299 + rgb.g * 587 + rgb.b * 114) / 1000
@@ -26,26 +27,25 @@ const serializeBlob = (blob, cb) => {
 }
 
 function postMessage(type, data) {
-	window.parent.postMessage(
-		{
+	window.parent.postMessage({
 			command: 'did-click-link',
 			data: `command:polacode._onmessage?${encodeURIComponent(JSON.stringify({ type, data }))}`
 		},
 		'file://'
 	)
 }
+
 function shoot(serializedBlob) {
-	window.parent.postMessage(
-		{
+	window.parent.postMessage({
 			command: 'did-click-link',
 			data: `command:polacode.shoot?${encodeURIComponent(JSON.stringify(serializedBlob))}`
 		},
 		'file://'
 	)
 }
+
 function copyToClipboard(serializedBlob) {
-	window.parent.postMessage(
-		{
+	window.parent.postMessage({
 			command: 'did-click-link',
 			data: `command:polacode.copyToClipboard?${encodeURIComponent(JSON.stringify(serializedBlob))}`
 		},
@@ -60,9 +60,11 @@ function getBrightness(hexColor) {
 	const b = (rgb >> 0) & 0xff
 	return (r * 299 + g * 587 + b * 114) / 1000
 }
+
 function isDark(hexColor) {
 	return getBrightness(hexColor) < 128
 }
+
 function getSnippetBgColor(html) {
 	return html.match(/background-color: (#[a-fA-F0-9]+)/)[1]
 }
@@ -111,7 +113,9 @@ document.addEventListener('paste', e => {
 	const minIndent = getMinIndent(code)
 
 	const snippetBgColor = getSnippetBgColor(innerHTML)
-	postMessage('updateBgColor', { bgColor: snippetBgColor })
+	postMessage('updateBgColor', {
+		bgColor: snippetBgColor
+	})
 	updateEnvironment(snippetBgColor)
 
 	if (minIndent !== 0) {
@@ -147,8 +151,7 @@ obturateur.addEventListener('mouseover', () => {
 		isInAnimation = true
 
 		new Vivus(
-			'save',
-			{
+			'save', {
 				duration: 40,
 				onReady: () => {
 					obturateur.className = 'obturateur filling'
@@ -167,15 +170,20 @@ obturateur.addEventListener('mouseover', () => {
 window.addEventListener('message', e => {
 	if (e) {
 		if (e.data.type === 'init') {
-			const { fontFamily, bgColor } = e.data
+			const {
+				fontFamily,
+				bgColor,
+				customizations
+			} = e.data
 
 			const initialHtml = getInitialHtml(fontFamily)
 			snippetNode.innerHTML = initialHtml
 
-			// update backdrop color, using bgColor from last pasted snippet
-			// cannot deduce from initialHtml since it's always using Nord color
+			// update container padding and background color using user settings
+			snippetContainerNode.style.padding = `${customizations.paddingTop}px ${customizations.paddingRight}px ${customizations.paddingBottom}px ${customizations.paddingLeft}px`;
+
 			if (isDark(bgColor)) {
-				snippetContainerNode.style.backgroundColor = '#f2f2f2'
+				snippetContainerNode.style.backgroundColor = customizations.backgroundColor
 			} else {
 				snippetContainerNode.style.background = 'none'
 			}
